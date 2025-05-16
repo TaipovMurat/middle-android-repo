@@ -1,8 +1,8 @@
 package com.example.androidpracticumcustomview
 
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.view.Gravity
+import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import com.example.androidpracticumcustomview.ui.theme.CustomContainer
@@ -22,18 +22,31 @@ class XmlActivity : ComponentActivity() {
         }
 
         val firstView = TextView(this).apply {
-            // TODO
-            // ...
+            text = "Простите"
+            textAlignment = ViewGroup.TEXT_ALIGNMENT_CENTER
+            gravity = Gravity.CENTER
+            setPadding(
+                context.resources.getDimensionPixelSize(R.dimen.padding_horizontal),
+                context.resources.getDimensionPixelSize(R.dimen.padding_vertical),
+                context.resources.getDimensionPixelSize(R.dimen.padding_horizontal),
+                context.resources.getDimensionPixelSize(R.dimen.padding_vertical),
+            )
         }
 
         val secondView = TextView(this).apply {
-            // TODO
-            // ...
+            text = "За просроченный дэдлайн"
+            textAlignment = ViewGroup.TEXT_ALIGNMENT_CENTER
+            gravity = Gravity.CENTER
+            setPadding(
+                context.resources.getDimensionPixelSize(R.dimen.padding_horizontal),
+                context.resources.getDimensionPixelSize(R.dimen.padding_vertical),
+                context.resources.getDimensionPixelSize(R.dimen.padding_horizontal),
+                context.resources.getDimensionPixelSize(R.dimen.padding_vertical),
+                )
         }
 
-        // Добавление второго элемента через некоторое время (например, по задержке)
-        Handler(Looper.getMainLooper()).postDelayed({
-            customContainer.addView(secondView)
-        }, 2000)
+        customContainer.addView(firstView)
+        customContainer.addView(secondView)
+
     }
 }

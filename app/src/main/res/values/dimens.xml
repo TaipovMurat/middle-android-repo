@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="containerWidth">100dp</dimen>
+    <dimen name="padding_horizontal">20dp</dimen>
+    <dimen name="padding_vertical">10dp</dimen>
+    <dimen name="stroke_width">1dp</dimen>
+    <dimen name="corners_round">8dp</dimen>
+</resources>
