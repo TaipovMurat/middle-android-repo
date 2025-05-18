@@ -17,6 +17,9 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.res.dimensionResource
 import com.example.androidpracticumcustomview.R
+import com.example.androidpracticumcustomview.utils.DEFAULT_DENSITY
+import com.example.androidpracticumcustomview.utils.DURATION_VIEWS_ALPHA
+import com.example.androidpracticumcustomview.utils.DURATION_VIEWS_TRANSLATION
 import kotlinx.coroutines.launch
 
 
@@ -40,7 +43,7 @@ fun CustomContainerCompose(
      * Вычисление размеров экрана в зависимости от плотности экрана
      */
     val screenHeightDp = LocalConfiguration.current.screenHeightDp
-    val density = LocalConfiguration.current.densityDpi / 160f
+    val density = LocalConfiguration.current.densityDpi / DEFAULT_DENSITY
     val screenHeightPx = screenHeightDp * density
 
 
@@ -57,6 +60,15 @@ fun CustomContainerCompose(
     var firstChildHeight = 0f
     var secondChildHeight = 0f
 
+
+    /**
+     * Переменные для определения значений скругления углов контейнеров
+     */
+    val cornerRadius = dimensionResource(R.dimen.corners_round)
+    val cornerShape = remember(cornerRadius) {
+        RoundedCornerShape(cornerRadius)
+    }
+
     // Блок активации анимации при первом запуске
     LaunchedEffect(Unit) {
         /**
@@ -66,21 +78,21 @@ fun CustomContainerCompose(
         launch {
             alpha.animateTo(
                 targetValue = 1f,
-                animationSpec = tween(durationViewsAlpha)
+                animationSpec = tween(DURATION_VIEWS_ALPHA.toInt())
             )
         }
 
         launch {
             offsetFirstChild.animateTo(
                 targetValue = -(screenHeightPx / 2 - firstChildHeight / 2),
-                animationSpec = tween(durationViewsMoving)
+                animationSpec = tween(DURATION_VIEWS_TRANSLATION.toInt())
             )
         }
 
         launch {
             offsetSecondChild.animateTo(
                 screenHeightPx / 2 - secondChildHeight / 2,
-                animationSpec = tween(durationViewsMoving)
+                animationSpec = tween(DURATION_VIEWS_TRANSLATION.toInt())
             )
         }
     }
@@ -105,7 +117,7 @@ fun CustomContainerCompose(
                 }
                 .border(
                     width = dimensionResource(R.dimen.stroke_width),
-                    shape = RoundedCornerShape(dimensionResource(R.dimen.corners_round)),
+                    shape = cornerShape,
                     color = Color.Cyan
                 )
             ) {
@@ -124,7 +136,7 @@ fun CustomContainerCompose(
                 }
                 .border(
                     width = dimensionResource(R.dimen.stroke_width),
-                    shape = RoundedCornerShape(dimensionResource(R.dimen.corners_round)),
+                    shape = cornerShape,
                     color = Color.Magenta
                 )) {
                 secondChild()

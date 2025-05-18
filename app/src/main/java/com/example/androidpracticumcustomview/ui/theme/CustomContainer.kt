@@ -1,11 +1,15 @@
 package com.example.androidpracticumcustomview.ui.theme
 
+import android.animation.AnimatorSet
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
 import com.example.androidpracticumcustomview.R
+import com.example.androidpracticumcustomview.utils.DURATION_VIEWS_ALPHA
+import com.example.androidpracticumcustomview.utils.DURATION_VIEWS_TRANSLATION
 
 /*
 Задание:
@@ -21,9 +25,6 @@ class CustomContainer @JvmOverloads constructor(
 ) : ViewGroup(context, attrs) {
 
     private val verticalMargin = context.resources.getDimensionPixelSize(R.dimen.padding_vertical)
-
-    var durationViewsAlpha: Long = 2000
-    var durationViewsMoving: Long = 5000
 
     init {
         setWillNotDraw(false)
@@ -68,20 +69,28 @@ class CustomContainer @JvmOverloads constructor(
      * к своим требуемым позициям
      */
     private fun setAnimationOnView(index: Int, child: View) {
-        child.alpha = 0f
         val translationValue =
             (measuredHeight - child.measuredHeight) / 2 - verticalMargin.toFloat()
-        child.animate().alpha(1f).setDuration(durationViewsAlpha)
-        when (index) {
-            0 -> {
-                child.setBackgroundResource(R.drawable.top_view_background)
-                child.animate().translationY(-translationValue).setDuration(durationViewsMoving)
-            }
+        val alphaAnimation = ObjectAnimator.ofFloat(child, View.ALPHA, 0f, 1f).apply {
+            duration = DURATION_VIEWS_ALPHA
+        }
 
-            1 -> {
-                child.setBackgroundResource(R.drawable.bottom_view_background)
-                child.animate().translationY(translationValue).setDuration(durationViewsMoving)
-            }
+        val translationAnimation = ObjectAnimator.ofFloat(
+            child,
+            View.TRANSLATION_Y,
+            if (index == 0) -translationValue else translationValue
+        ).apply {
+            duration = DURATION_VIEWS_TRANSLATION
+        }
+
+        when (index) {
+            0 -> child.setBackgroundResource(R.drawable.top_view_background)
+            1 -> child.setBackgroundResource(R.drawable.bottom_view_background)
+        }
+
+        AnimatorSet().apply {
+            playTogether(alphaAnimation, translationAnimation)
+            start()
         }
     }
 
